@@ -19,14 +19,15 @@ export function user(state=INIT_STATE, action) {
       return {...state,msg:'',url:getRedirectPath(action.payload),...action.payload};
     case ERROR_MSG:
       return {...state,isAuth:false,msg:action.msg}
-
     case LOAD_DATA :
+    console.log(action.payload)
       return {...state,...action.payload}
     default:
       return state;
   }
 }
 export function loadData(userinfo) {
+  console.log(userinfo)
   return {type:LOAD_DATA,payload:userinfo}
 }
 

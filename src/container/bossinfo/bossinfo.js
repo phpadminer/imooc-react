@@ -1,30 +1,25 @@
 import React, { Component } from 'react'
 import {NavBar,List,InputItem,WhiteSpace,TextareaItem,Button} from 'antd-mobile'
 import AvatorSelector from '../../component/avator-selector/avator-selector';
-
-import {update} from '../../redux/user.redux'
 import {connect} from 'react-redux'
+import {update} from '../../redux/user.redux'
 
+@connect(
+  state=>state.user,
+  {update}
+)
 class BossInfo extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      avatar:'',
-      title:'',
-      company:'',
-      desc:''
-    }
     this.handleChange= this.handleChange.bind(this)
-    this.DoUpdate = this.DoUpdate.bind(this)
   }
+
   handleChange(key,val){
     this.setState({
       [key]:val
     })
   }
-  DoUpdate(){
-    this.props.update(this.state)
-  }
+
   render() {
     return (
       <div>
@@ -70,11 +65,15 @@ class BossInfo extends Component {
           <WhiteSpace></WhiteSpace>
           <Button
             type='primary'
-            onClick={this.DoUpdate}
+            onClick={()=>{
+              console.log(this.state)
+              this.props.update(this.state)
+            }}
           >保存</Button>
         </List>
       </div>
     )
   }
 }
-export default connect(state=>state.user, {update})(BossInfo)
+// export default connect(state=>state.user, {update})(BossInfo)
+export default BossInfo

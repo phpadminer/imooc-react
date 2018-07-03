@@ -29,14 +29,18 @@ Router.post('/register', function (req, res) {
     if(doc){
       return res.json({code:1,msg:'用户名重复'})
     }
-    // 没有的话就创建一个
-    User.create({user,pwd: md5Pwd(pwd),type}, function (e, d) {
+    const userModel = new User({user,pwd: md5Pwd(pwd),type})
+    userModel.save(function (e, d) {
       if (e) {
         return res.json({code: 1,msg: '后端出错了'})
       }
-      return res.json({code:0})
+        const {user,type,_id} = d
+        res.cookie('userid', d._id)
+        return res.json({code:0,data:{user,type,_id}})
+      })
     })
-  })
+    // 没有的话就创建一个
+
 })
 // 登录路由
 Router.post('/login',function (req,res){
@@ -79,7 +83,7 @@ Router.get('/info', function (req, res) {
       }
     })
 })
-
+// 更新用户信息
 Router.post('/update',function(req,res){
   // 首先先验证是否登录,这里之所以要验证请求
   console.log(req.body)
@@ -89,7 +93,7 @@ Router.post('/update',function(req,res){
   }
   User.findByIdAndUpdate(userid,req.body,function(err,doc){
     // 对象合并 https://blog.csdn.net/qq_30100043/article/details/53422657
-
+    console.log(doc)
     const data = Object.assign({},{
       user: req.body.user,
       type: req.body.type,
