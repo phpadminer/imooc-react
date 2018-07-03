@@ -2,10 +2,9 @@
 import axios from 'axios'
 import { getRedirectPath } from '../util'
 const ERROR_MSG = 'register_error'
-const REG_SUCCESS_MSG = 'register_success'
-const LOG_SUCCESS_MSG ='login_success'
+const AUTH_SUCCESS = 'auth_success'
+const LOAD_DATA = 'load_user_data'
 const INIT_STATE = {
-  isAuth:false,
   msg: '',
   user: '',
   pwd: '',
@@ -15,36 +14,30 @@ const INIT_STATE = {
 // reducer
 export function user(state=INIT_STATE, action) {
   switch (action.type) {
-    case REG_SUCCESS_MSG:
-      console.log(action.payload)
+    case AUTH_SUCCESS:
     // 如果验证通过了后就继续就跳转到指定的位置
-      return {...state,msg:'',isAuth:true,url:getRedirectPath(action.payload),...action.payload};
-      break;
+      return {...state,msg:'',url:getRedirectPath(action.payload),...action.payload};
     case ERROR_MSG:
       return {...state,isAuth:false,msg:action.msg}
-    case LOG_SUCCESS_MSG:
-      return {...state,isAuth:true,url:getRedirectPath(action.payload),...action.payload}
+
+    case LOAD_DATA :
+      return {...state,...action.payload}
     default:
       return state;
   }
 }
-
-function registerSuccess(data){
-  return {type:REG_SUCCESS_MSG,payload:data}
+export function loadData(userinfo) {
+  return {type:LOAD_DATA,payload:userinfo}
 }
 
-function loginSuccess(data) {
-  return {
-    type: LOG_SUCCESS_MSG,
-    payload: data
-  }
+// 当注册/登录/更新数据验证成功后的函数
+function authSuccess(data){
+  return {type:AUTH_SUCCESS,payload:data}
 }
 
+// 当报错的时候的函数
 function errorMsg(msg) {
-  return {
-    msg,
-    type: ERROR_MSG
-  }
+  return { msg,type: ERROR_MSG}
 }
 
 // 判断注册功能的模块
@@ -64,14 +57,14 @@ export function register({user,pwd,repwd,type})
     axios.post('/user/register', {user,pwd,type})
       .then(res => {
         if (res.status == 200 && res.data.code === 0) {
-          dispatch(registerSuccess({user,pwd,type}))
+          dispatch(authSuccess({user,pwd,type}))
         } else {
           dispatch(errorMsg(res.data.msg))
         }
       })
   }
 }
-
+// 登录验证函数
 export function login({user,pwd}){
   // 首先验证用户名和密码是否为空格
   if(!user || !pwd){
@@ -81,12 +74,23 @@ export function login({user,pwd}){
     axios.post('/user/login', {user,pwd})
       .then(res => {
         if (res.status == 200 && res.data.code === 0) {
-          dispatch(loginSuccess(res.data.data))
+          dispatch(authSuccess(res.data.data))
         } else {
           dispatch(errorMsg(res.data.msg))
         }
       })
   }
-
-
+}
+// 更新验证函数
+export function update (data) {
+  return dispatch=>{
+    axios.post('/user/update',data)
+      .then(res => {
+        if (res.status == 200 && res.data.code === 0) {
+          dispatch(authSuccess(res.data.data))
+        } else {
+          dispatch(errorMsg(res.data.msg))
+        }
+      })
+  }
 }

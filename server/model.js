@@ -13,6 +13,7 @@ const models = {
     'type':{'type':String,'require':true},
     'avatar':{'type':String},
     'desc':{'type':String},
+    // 职位
     'title':{'type':String},
     'company':{'type':String},
     'money':{'type':String}

@@ -63,9 +63,8 @@ Router.post('/login',function (req,res){
       //   return res.json(result);
 
   })
-
 })
-// 用户信息表
+// 用来检查用户是否登录 如果登录的话就返回用户的信息
 Router.get('/info', function (req, res) {
   const {userid} = req.cookies
   if(!userid){
@@ -79,6 +78,25 @@ Router.get('/info', function (req, res) {
         return res.json({code:0,data:doc})
       }
     })
+})
+
+Router.post('/update',function(req,res){
+  // 首先先验证是否登录,这里之所以要验证请求
+  console.log(req.body)
+  const {userid} = req.cookies
+  if(!userid){
+    return res.json({code:1,msg:'还没有登录'})
+  }
+  User.findByIdAndUpdate(userid,req.body,function(err,doc){
+    // 对象合并 https://blog.csdn.net/qq_30100043/article/details/53422657
+
+    const data = Object.assign({},{
+      user: req.body.user,
+      type: req.body.type,
+    }, req.body)
+    // console.log(data)
+    return res.json({data,code:0})
+  })
 })
 
 /**

@@ -15,6 +15,8 @@ import './config'
 import Login from './container/login/login'
 import Register from './container/register/register'
 import AuthRoute from './component/authroute/authroute'
+// import NiurenInfo from './container/niureninfo/niureninfo'
+import BossInfo from './container/bossinfo/bossinfo'
 
 
 let store = createStore(combineReducers, compose(
@@ -28,8 +30,10 @@ ReactDom.render(
             <div>
                 {/* 权限验证 */}
                 <AuthRoute></AuthRoute>
-                <Route path="/login" component={Login}>{Login}</Route>
-                <Route path="/register" component={Register}>{Register}</Route>
+                <Route path="/login" component={Login}></Route>
+                <Route path="/register" component={Register}></Route>
+                {/* 牛人信息完善页面 */}
+                <Route path="/bossinfo" component={BossInfo}></Route>
             </div>
         </BrowserRouter>
     </Provider>)

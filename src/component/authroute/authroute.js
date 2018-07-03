@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 // 引入axios
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
+import {loadData} from '../../redux/user.redux'
+import { connect } from 'react-redux';
 /**
  * 权限验证
  *
@@ -18,12 +20,13 @@ class AuthRoute extends Component {
       return null
     }
     axios.get('/user/info')
-      .then(res=>{
+      .then(res => {
         // 首先观察看一下是否请求成功
-        if(res.status == 200){
-          if(res.data.code == 0){
+        if (res.status == 200) {
+          if (res.data.code == 0) {
             //说明当前是有登录信息的
-          }else{
+            this.props.loadData(res.data.data)
+          } else {
             this.props.history.push('./login')
           }
         }
@@ -43,4 +46,4 @@ class AuthRoute extends Component {
   }
 }
 
-export default AuthRoute
+export default connect(state=>state.user, {loadData})(AuthRoute)
