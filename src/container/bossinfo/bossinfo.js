@@ -3,11 +3,12 @@ import {NavBar,List,InputItem,WhiteSpace,TextareaItem,Button} from 'antd-mobile'
 import AvatorSelector from '../../component/avator-selector/avator-selector';
 import {connect} from 'react-redux'
 import {update} from '../../redux/user.redux'
+import { Redirect } from 'react-router-dom';
 
-@connect(
-  state=>state.user,
-  {update}
-)
+// @connect(
+//   state=>state.user,
+//   {update}
+// )
 class BossInfo extends Component {
   constructor(props) {
     super(props);
@@ -21,8 +22,13 @@ class BossInfo extends Component {
   }
 
   render() {
+    const currentPath = this.props.location.pathname
+    const directUrl = this.props.url
     return (
+
       <div>
+
+        {(directUrl && directUrl!==currentPath)?<Redirect to={directUrl}/>:null}
         {/* 页眉 */}
         <NavBar mode="dark">牛人信息补充页</NavBar>
         {/* 选择头像 */}
@@ -66,7 +72,6 @@ class BossInfo extends Component {
           <Button
             type='primary'
             onClick={()=>{
-              console.log(this.state)
               this.props.update(this.state)
             }}
           >保存</Button>
@@ -75,5 +80,5 @@ class BossInfo extends Component {
     )
   }
 }
-// export default connect(state=>state.user, {update})(BossInfo)
-export default BossInfo
+export default connect(state=>state.user, {update})(BossInfo)
+// export default BossInfo

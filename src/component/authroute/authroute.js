@@ -22,8 +22,8 @@ class AuthRoute extends Component {
     axios.get('/user/info')
       .then(res => {
         // 首先观察看一下是否请求成功
-        if (res.status == 200) {
-          if (res.data.code == 0) {
+        if (res.status === 200) {
+          if (res.data.code === 0) {
             //说明当前是有登录信息的
             this.props.loadData(res.data.data)
           } else {

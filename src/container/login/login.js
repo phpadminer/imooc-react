@@ -47,7 +47,8 @@ class Login extends React.Component{
                             onChange={(v)=>this.handChange('user',v)}
                         >用户名</InputItem>
                         <InputItem
-                            clear='true'
+                            clear
+                            type="password"
                             onChange = {
                                 (v) => this.handChange('pwd', v)
                             }

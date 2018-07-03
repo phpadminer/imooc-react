@@ -3,11 +3,9 @@ import ReactDom from 'react-dom'
 import {createStore ,applyMiddleware,compose} from 'redux'
 import thunk from 'redux-thunk'
 import { Provider } from 'react-redux'
-import {counter} from './index.redux'
 import {
     BrowserRouter,
     Route,
-    Link
 } from 'react-router-dom'
 
 import combineReducers from './reducer'

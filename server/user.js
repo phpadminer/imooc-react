@@ -45,7 +45,7 @@ Router.post('/register', function (req, res) {
 // 登录路由
 Router.post('/login',function (req,res){
   const {user,pwd} = req.body
-  console.log(md5Pwd(pwd))
+
   User.findOne({user,'pwd':md5Pwd(pwd)},_filters, function (err,doc){
 
     if(!doc){
@@ -95,8 +95,8 @@ Router.post('/update',function(req,res){
     // 对象合并 https://blog.csdn.net/qq_30100043/article/details/53422657
     console.log(doc)
     const data = Object.assign({},{
-      user: req.body.user,
-      type: req.body.type,
+      user: doc.user,
+      type: doc.type,
     }, req.body)
     // console.log(data)
     return res.json({data,code:0})

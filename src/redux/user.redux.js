@@ -20,7 +20,6 @@ export function user(state=INIT_STATE, action) {
     case ERROR_MSG:
       return {...state,isAuth:false,msg:action.msg}
     case LOAD_DATA :
-    console.log(action.payload)
       return {...state,...action.payload}
     default:
       return state;
@@ -57,7 +56,7 @@ export function register({user,pwd,repwd,type})
   return dispatch => {
     axios.post('/user/register', {user,pwd,type})
       .then(res => {
-        if (res.status == 200 && res.data.code === 0) {
+        if (res.status === 200 && res.data.code === 0) {
           dispatch(authSuccess({user,pwd,type}))
         } else {
           dispatch(errorMsg(res.data.msg))
@@ -74,7 +73,7 @@ export function login({user,pwd}){
   return dispatch => {
     axios.post('/user/login', {user,pwd})
       .then(res => {
-        if (res.status == 200 && res.data.code === 0) {
+        if (res.status === 200 && res.data.code === 0) {
           dispatch(authSuccess(res.data.data))
         } else {
           dispatch(errorMsg(res.data.msg))
@@ -87,7 +86,7 @@ export function update (data) {
   return dispatch=>{
     axios.post('/user/update',data)
       .then(res => {
-        if (res.status == 200 && res.data.code === 0) {
+        if (res.status === 200 && res.data.code === 0) {
           dispatch(authSuccess(res.data.data))
         } else {
           dispatch(errorMsg(res.data.msg))
